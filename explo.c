@@ -10,6 +10,10 @@ int compteur =0;
 int save;
 int stamina=100;
 int compteur_repos;
+int alea_monstre;
+int decision_combat;
+int decision_ennemie_ogre;
+int decision_ennemie_slime;
 
 struct Lieu{
 
@@ -21,7 +25,13 @@ char desc_2[1000];
 
 };
 
+struct Combat {
+int vie;
+int attaque;
+};
+
 typedef struct Lieu lieu;
+typedef struct Combat combat;
 
 
 
@@ -54,6 +64,70 @@ printf("tu peux aller : %s\n", lieux[lieux[save].tableau[1]].nom);
 printf("tu peux aller : %s\n", lieux[lieux[save].tableau[2]].nom);
 }
 
+void defense_ogre(combat * player, combat * ogre){
+  printf("L'ennemie se defends !\n");
+  if(decision_combat == 1){
+    printf("Tu attaque mais ton épée explose en morceau !\n");
+    (*ogre).vie = (*ogre).vie - ((*player).attaque/2);
+  }
+  if(decision_combat == 2){
+    printf("Tu te defends aussi donc pas de degats !\n");
+  }
+
+  printf("Il te reste %d vie !\n", (*player).vie);
+    printf("Il lui reste %d\n", (*ogre).vie);
+}
+
+void attaque_ogre(combat * ogre, combat * player){
+  printf("L'ennemie attaque !\n");
+  if(decision_combat == 1){
+    printf("Tu attaque aussi !\n");
+    player->vie = player->vie - ogre->attaque;
+    (*ogre).vie = (*ogre).vie - (*player).attaque;
+  }
+  if(decision_combat == 2){
+    printf("tu te defends !\n");
+    (*player).vie = (*player).vie - ((*ogre).attaque /2);
+  }
+
+  printf("Il te reste %d vie !\n", (*player).vie);
+    printf("Il lui reste %d\n", (*ogre).vie);
+
+}
+
+
+
+
+void defense_slime(combat * player, combat * slime){
+
+  if(decision_combat == 1){
+    printf("L'ennemie gobe ton épee !\n");
+  }
+  if(decision_combat == 2){
+    printf("Tu te defends !\n");
+  }
+
+  printf("Il te reste %d vie !\n", (*player).vie);
+    printf("Il lui reste %d\n", (*slime).vie);
+}
+
+void attaque_slime(combat * slime, combat * player){
+  printf("L'ennemie attaque !\n");
+  if(decision_combat == 1){
+    printf("Tu attaque aussi !\n");
+    player->vie = player->vie - slime->attaque;
+    (*slime).vie = (*slime).vie - (*player).attaque;
+  }
+  if(decision_combat == 2){
+    printf("tu te defends !\n");
+    (*player).vie = (*player).vie - ((*slime).attaque /2);
+  }
+
+  printf("Il te reste %d vie !\n", (*player).vie);
+    printf("Il lui reste %d\n", (*slime).vie);
+
+}
+
 
 
 int main(){
@@ -80,6 +154,10 @@ int main(){
   strcpy(lieux[3].desc_2, "");
   lieux[3].tableau[1] = 2 ;
   lieux[3].tableau[2] = 1 ;
+
+  combat player = {100, 10};
+  combat ogre = {200,5};
+  combat slime =  {50, 2};
 
 
 
@@ -117,6 +195,9 @@ if(strcmp(decision,"repos") == 0 && lieux[save].difficulte <= 5){
     compteur_repos += 1;
     stamina = stamina + compteur_repos;
   }
+  if(stamina > 100){
+  stamina = 100;
+}
   printf("tu as %d stamina ! \n", stamina);
 }
 else if (strcmp(decision,"repos") == 0 && lieux[save].difficulte > 5){
@@ -131,7 +212,51 @@ if(strcmp(decision, "arreter")==0 || stamina <= 0){
 }
 if(strcmp(decision, lieux[save].nom) ==0){
             printf("tu ne peux pas effectuer ce deplacements\n");
-          }
+}
+
+if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
+  printf("Tu attaque un monstre !");
+  stamina = stamina - 20;
+  srand(time(NULL));
+  int nbgen=rand()%2+1;
+  alea_monstre = nbgen;
+  if(alea_monstre == 1){
+    printf("Un ogre t'attaque !\n");
+    printf("%d\n", ogre.vie);
+    printf("%d\n", player.vie);
+    while(ogre.vie > 0 && player.vie > 0){
+      printf("Que veux tu faire ? (attaque =1 et defense = 2)\n");
+      scanf("%d", &decision_combat);
+      srand(time(NULL));
+      int nbgen=rand()%2+1;
+      decision_ennemie_ogre = nbgen;
+      if(decision_ennemie_ogre == 1){
+        defense_ogre(&player, &ogre);
+      }
+      if(decision_ennemie_ogre == 2){
+        attaque_ogre(&ogre, &player);
+      }
+    }
+  }
+  else if(alea_monstre == 2){
+    printf("Un slime t'attaque !");
+    while(player.vie > 0 && slime.vie >0){
+      printf("Que veux tu faire ? (attaque =1 et defense = 2)\n");
+      scanf("%d", &decision_combat);
+    srand(time(NULL));
+      int nbgen=rand()%2+1;
+      decision_ennemie_slime = nbgen;
+      if(decision_ennemie_slime == 1){
+        defense_slime(&player, &slime);
+      }
+      if(decision_ennemie_slime == 2){
+        attaque_slime(&slime, &player);
+      }
+    }
+  }
+}
+
+
 }
 
 
