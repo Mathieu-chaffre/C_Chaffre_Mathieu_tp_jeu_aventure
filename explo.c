@@ -47,7 +47,7 @@ if(reponse == 0){
   printf("Tu te dirige vers %s\n ", decision);
   printf("%s", lieux[save].desc);
   printf("%s\n", lieux[save].desc_2);
-   
+
 }
 printf("ou veux tu aller ?\n ");
 printf("tu peux aller : %s\n", lieux[lieux[save].tableau[1]].nom);
@@ -129,8 +129,9 @@ if(strcmp(decision, "arreter")==0 || stamina <= 0){
   printf("tu t'arrete !");
   loop =0;
 }
-if(strcmp(decision, lieux[save].nom) ==0)
+if(strcmp(decision, lieux[save].nom) ==0){
             printf("tu ne peux pas effectuer ce deplacements\n");
+          }
 }
 
 
