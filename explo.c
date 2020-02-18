@@ -19,6 +19,7 @@ int demande;
 int nombre;
 int piece = 200;
 int demande_2;
+int alea;
 
 struct Lieu{
 
@@ -310,6 +311,9 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
     }
     if(ogre.vie <= 0){
       printf("Il est mort\n");
+      ogre.attaque += 10;
+      slime.vie +=50;
+      player.attaque += 20;
     }
     if(player.vie <= 0){
       printf("tu es mort\n");
@@ -321,7 +325,6 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
     scanf("%s", decision);
     if(strcmp("montagne", decision)==0){
       printf("tu ne peux pas aller ici\n");
-      scanf("%s", decision);
     }
   }
   else if(alea_monstre == 2){
@@ -341,6 +344,9 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
     }
     if(slime.vie <= 0){
       printf("Il est mort\n");
+      slime.attaque += 10;
+      slime.vie +=30;
+      player.attaque += 15;
     }
     if(player.vie <= 0){
       printf("tu es mort\n");
@@ -352,7 +358,6 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
     scanf("%s", decision);
     if(strcmp("montagne", decision)==0){
       printf("tu ne peux pas aller ici\n");
-      scanf("%s", decision);
     }
   }
 }
@@ -407,8 +412,50 @@ if(strcmp(lieux[save].nom, "village") == 0 && strcmp("shop", decision) == 0){
   break;
   }
   }
+  printf("Ou veux-tu aller ?\n");
+  printf("Tu peux aller : plage\n");
+  printf("Tu peux aller : montagne\n");
+  scanf("%s", decision);
+  if(strcmp(decision, "village")==0){
+    printf("Tu ne peux pas faire ça\n");
+  }
 }
 
+
+if(strcmp(lieux[save].nom, "plage") == 0 && strcmp("fouiller", decision) == 0){
+  printf("tu fouille les lieux !");
+
+srand(time(NULL));
+      int aleanb=rand()%2+1;
+      alea = aleanb;
+
+      if(alea == 1){
+        printf("Tu ne trouve que des poissons morts et tu te blesse\n");
+        player.vie -=5;
+      }
+      else if(alea == 2){
+        printf("tu trouve un corps\n");
+        srand(time(NULL));
+      int nbgen=rand()%2+1;
+      int choix = nbgen;
+      if(choix == 1){
+        printf("tu trouve une epee\n");
+        tableau[1].inventaire +=1;
+      }
+      else if(choix == 2){
+        printf("tu trouve un bouclier\n");
+        tableau[0].inventaire +=1;
+      }
+      }
+      printf("tu ne peux plus fouiller ici pour le moment. ");
+  printf("Ou veux-tu aller ?\n");
+  printf("Tu peux aller : village\n");
+  printf("Tu peux aller : montagne\n");
+  scanf("%s", decision);
+  if(strcmp(decision, "plage")==0){
+    printf("Tu ne peux pas faire ça\n");
+  }
+  }
 
 }
 
