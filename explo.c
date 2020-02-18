@@ -14,6 +14,11 @@ int alea_monstre;
 int decision_combat;
 int decision_ennemie_ogre;
 int decision_ennemie_slime;
+int loop_2;
+int demande;
+int nombre;
+int piece = 200;
+int demande_2;
 
 struct Lieu{
 
@@ -30,6 +35,15 @@ int vie;
 int attaque;
 };
 
+struct Objet{
+  int classement;
+  char nom[50];
+  int nombre;
+  int prix;
+  int inventaire;
+};
+
+typedef struct Objet objet;
 typedef struct Lieu lieu;
 typedef struct Combat combat;
 
@@ -154,6 +168,22 @@ int main(){
   strcpy(lieux[3].desc_2, "");
   lieux[3].tableau[1] = 2 ;
   lieux[3].tableau[2] = 1 ;
+
+
+  objet tableau[109];
+  tableau[0].classement = 1;
+  strcpy(tableau[0].nom, "bouclier");
+  srand(time(NULL));
+  tableau[0].nombre = rand()%11+1;
+  tableau[0].prix = 10;
+  tableau[0].inventaire = 0;
+
+  tableau[1].classement = 2;
+  strcpy(tableau[1].nom, "epee");
+  srand(time(NULL));
+  tableau[1].nombre =rand()%10+1;
+  tableau[1].prix = 40;
+  tableau[1].inventaire = 0;
 
   combat player = {100, 10};
   combat ogre = {200,5};
@@ -286,11 +316,60 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
   }
 }
 
+if(strcmp(lieux[save].nom, "village") == 0 && strcmp("shop", decision) == 0){
+  loop_2 = 1;
+  while(loop_2 == 1){
+    printf("Tu as : %d $ restant !\n", piece );
+    printf("Que veux tu faire /1 inventaire /2 magasin /3 partir\n");
+    scanf("%d", &demande );
+  switch(demande){
+    case 1:
 
+    printf("Tu rentre dans l'inventaire\n");
+    for(int i = 0; i <= 1; i++){
+            printf("[%d] %s :  tu en as %d\n",tableau[i].classement, tableau[i].nom, tableau[i].inventaire);
+          }
+
+  break;
+    case 2 :
+    printf("tu rentre dans le shop\n");
+    for(int i = 0; i <= 1; i++){
+            printf("[%d] %s :  il en a %d  a %d $\n",tableau[i].classement, tableau[i].nom, tableau[i].nombre , tableau[i].prix );
+          }
+
+          printf("Tu veux quoi ?\n");
+            scanf("%d", &demande_2);
+            demande_2 -=1;
+            printf("Tu en veux combien ?\n");
+            scanf("%d", &nombre);
+            if(nombre <= tableau[demande_2].nombre && piece > (tableau[demande_2].prix*nombre)){
+              printf("tu choisi %s\n", tableau[demande_2].nom);
+            tableau[demande_2].inventaire += nombre;
+            tableau[demande_2].nombre -= nombre;
+            piece -= tableau[demande_2].prix*nombre;
+            printf("Tu as achete %d %s au prix de %d\n", nombre, tableau[demande_2].nom, (tableau[demande_2].prix*nombre) );
+            }
+            else if(piece < (tableau[demande_2].prix*nombre) ){
+              printf("Tu n'as pas assez d'argent\n");
+            }
+            else if(nombre > tableau[demande_2].nombre){
+              printf("Le vendeur n'a pas tout ca !\n");
+            }
+
+
+  break;
+    case 3:
+
+    printf("Tu pars !\n");
+    loop_2 = 0;
+
+  break;
+  }
+  }
 }
 
 
-
+}
 
   return 0;
 }
