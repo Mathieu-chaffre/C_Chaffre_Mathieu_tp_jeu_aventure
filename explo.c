@@ -78,11 +78,20 @@ printf("tu peux aller : %s\n", lieux[lieux[save].tableau[1]].nom);
 printf("tu peux aller : %s\n", lieux[lieux[save].tableau[2]].nom);
 }
 
-void defense_ogre(combat * player, combat * ogre){
+void defense_ogre(combat * player, combat * ogre, objet * attaque, objet * defense){
   printf("L'ennemie se defends !\n");
+
+  (*attaque).inventaire -=1;
   if(decision_combat == 1){
     printf("Tu attaque mais ton épée explose en morceau !\n");
+    if((*attaque).inventaire > 0){
+
     (*ogre).vie = (*ogre).vie - ((*player).attaque/2);
+    }
+    else if ((*attaque).inventaire <=0){
+      (*ogre).vie = (*ogre).vie - ((*player).attaque/4);
+
+    }
   }
   if(decision_combat == 2){
     printf("Tu te defends aussi donc pas de degats !\n");
@@ -92,16 +101,31 @@ void defense_ogre(combat * player, combat * ogre){
     printf("Il lui reste %d\n", (*ogre).vie);
 }
 
-void attaque_ogre(combat * ogre, combat * player){
+void attaque_ogre(combat * ogre, combat * player, objet * attaque, objet * defense ){
   printf("L'ennemie attaque !\n");
   if(decision_combat == 1){
     printf("Tu attaque aussi !\n");
+    if((*attaque).inventaire > 0){
+
     player->vie = player->vie - ogre->attaque;
     (*ogre).vie = (*ogre).vie - (*player).attaque;
+    }
+    else if((*attaque).inventaire <=0){
+      player->vie = player->vie - ogre->attaque;
+    (*ogre).vie = (*ogre).vie - ((*player).attaque /2);
+    }
   }
   if(decision_combat == 2){
     printf("tu te defends !\n");
+    if((*defense).inventaire > 0){
     (*player).vie = (*player).vie - ((*ogre).attaque /2);
+    (*defense).inventaire -=1;
+    printf("ton bouclier se brise sous sa force!\n");
+    }
+    else if ((*defense).inventaire <=0){
+      printf("tu n'as plus de quoi te défendre\n");
+      (*player).vie = (*player).vie - (*ogre).attaque;
+    }
   }
 
   printf("Il te reste %d vie !\n", (*player).vie);
@@ -112,29 +136,46 @@ void attaque_ogre(combat * ogre, combat * player){
 
 
 
-void defense_slime(combat * player, combat * slime){
+void defense_slime(combat * player, combat * slime, objet * attaque){
 
   if(decision_combat == 1){
+    (*attaque).inventaire -=1;
     printf("L'ennemie gobe ton épee !\n");
   }
   if(decision_combat == 2){
-    printf("Tu te defends !\n");
+    printf("Tu te defends ! Et lui aussi !\n");
   }
 
   printf("Il te reste %d vie !\n", (*player).vie);
     printf("Il lui reste %d\n", (*slime).vie);
 }
 
-void attaque_slime(combat * slime, combat * player){
+void attaque_slime(combat * slime, combat * player, objet * attaque, objet * defense){
   printf("L'ennemie attaque !\n");
   if(decision_combat == 1){
     printf("Tu attaque aussi !\n");
-    player->vie = player->vie - slime->attaque;
+    if((*attaque).inventaire > 0){
+      player->vie = player->vie - slime->attaque;
     (*slime).vie = (*slime).vie - (*player).attaque;
+    }
+    else if ((*attaque).inventaire <=0){
+      player->vie = player->vie - slime->attaque;
+    (*slime).vie = (*slime).vie - ((*player).attaque /2);
+    }
+
   }
   if(decision_combat == 2){
     printf("tu te defends !\n");
+    printf("l'ennemie attaque !\n");
+    if((*defense).inventaire > 0){
     (*player).vie = (*player).vie - ((*slime).attaque /2);
+    printf("ton bouclier a pleins de morve dessus tu l'abandonne car elle te degoute\n");
+    (*defense).inventaire -=1;
+    }
+    else if((*defense).inventaire <=0){
+      printf("tu ne peux pas te defendre vu que tu n'as plus rien\n");
+      (*player).vie = (*player).vie - (*slime).attaque;
+    }
   }
 
   printf("Il te reste %d vie !\n", (*player).vie);
@@ -150,21 +191,21 @@ int main(){
   lieu lieux[20];
   lieux[1].difficulte = 15;
   strcpy(lieux[1].nom, "plage");
-  strcpy(lieux[1].desc, "tu arrive sur une magnifique plage pleins de poissons morts\n");
+  strcpy(lieux[1].desc, "tu arrive sur une magnifique plage pleins de poissons morts. Ici tu peux fouiller ! (ecrire fouiller)\n");
   strcpy(lieux[3].desc_2, "");
   lieux[1].tableau[1] = 2 ;
   lieux[1].tableau[2] = 3 ;
 
   lieux[2].difficulte = 19;
   strcpy(lieux[2].nom, "montagne");
-  strcpy(lieux[2].desc, "tu arrive sur vers une montagne avec un cimetiere abandonne\n");
+  strcpy(lieux[2].desc, "tu arrive sur vers une montagne avec un cimetiere abandonne ! Ici tu peux combattre (ecrire combat)\n");
   strcpy(lieux[3].desc_2, "");
   lieux[2].tableau[1] = 1 ;
   lieux[2].tableau[2] = 3 ;
 
   lieux[3].difficulte = 3;
   strcpy(lieux[3].nom, "village");
-  strcpy(lieux[3].desc, "tu arrive sur vers un village magnifique de riche\n");
+  strcpy(lieux[3].desc, "tu arrive sur vers un village magnifique de riche. Ici tu peux acheter (ecrire shop)\n");
   strcpy(lieux[3].desc_2, "");
   lieux[3].tableau[1] = 2 ;
   lieux[3].tableau[2] = 1 ;
@@ -176,14 +217,14 @@ int main(){
   srand(time(NULL));
   tableau[0].nombre = rand()%11+1;
   tableau[0].prix = 10;
-  tableau[0].inventaire = 0;
+  tableau[0].inventaire = 1;
 
   tableau[1].classement = 2;
   strcpy(tableau[1].nom, "epee");
   srand(time(NULL));
   tableau[1].nombre =rand()%10+1;
   tableau[1].prix = 40;
-  tableau[1].inventaire = 0;
+  tableau[1].inventaire = 1;
 
   combat player = {100, 10};
   combat ogre = {200,5};
@@ -261,10 +302,10 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
       int nbgen=rand()%2+1;
       decision_ennemie_ogre = nbgen;
       if(decision_ennemie_ogre == 1){
-        defense_ogre(&player, &ogre);
+        defense_ogre(&player, &ogre, &tableau[1], &tableau[0]);
       }
       if(decision_ennemie_ogre == 2){
-        attaque_ogre(&ogre, &player);
+        attaque_ogre(&ogre, &player, &tableau[1], &tableau[0]);
       }
     }
     if(ogre.vie <= 0){
@@ -292,10 +333,10 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
       int nbgen=rand()%2+1;
       decision_ennemie_slime = nbgen;
       if(decision_ennemie_slime == 1){
-        defense_slime(&player, &slime);
+        defense_slime(&player, &slime, &tableau[1]);
       }
       if(decision_ennemie_slime == 2){
-        attaque_slime(&slime, &player);
+        attaque_slime(&slime, &player, &tableau[1], &tableau[0]);
       }
     }
     if(slime.vie <= 0){
