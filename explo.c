@@ -211,14 +211,14 @@ int main(){
 
   lieux[2].difficulte = 19;
   strcpy(lieux[2].nom, "montagne");
-  strcpy(lieux[2].desc, "tu arrive sur vers une montagne avec un cimetiere abandonne ! Ici tu peux combattre (ecrire combat)\n");
+  strcpy(lieux[2].desc, "tu arrive vers une montagne avec un cimetiere abandonne ! Ici tu peux combattre (ecrire combat)\n");
   strcpy(lieux[3].desc_2, "");
   lieux[2].tableau[1] = 1 ;
   lieux[2].tableau[2] = 3 ;
 
   lieux[3].difficulte = 3;
   strcpy(lieux[3].nom, "village");
-  strcpy(lieux[3].desc, "tu arrive sur vers un village magnifique de riche. Ici tu peux acheter (ecrire shop)\n");
+  strcpy(lieux[3].desc, "tu arrive vers un village magnifique de riche. Ici tu peux acheter (ecrire shop)\n");
   strcpy(lieux[3].desc_2, "");
   lieux[3].tableau[1] = 2 ;
   lieux[3].tableau[2] = 1 ;
@@ -240,7 +240,7 @@ int main(){
   tableau[1].inventaire = 1;
 
   combat player = {100, 10};
-  combat ogre = {200,5};
+  combat ogre = {120,5};
   combat slime =  {50, 2};
 
 
@@ -284,7 +284,7 @@ if(strcmp(decision,"repos") == 0 && lieux[save].difficulte <= 5){
 }
 player.vie = 100;
   printf("tu as %d stamina ! \n", stamina);
-  printf("t'es pv sont restauree");
+  printf("t'es pv sont restaures\n");
 }
 else if (strcmp(decision,"repos") == 0 && lieux[save].difficulte > 5){
   printf("tu ne peux te reposer tu es en endroit hostile !\n");
@@ -330,6 +330,7 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
       slime.vie +=50;
       player.attaque += 20;
       piece += 40;
+      ogre.vie = 120;
     }
     if(player.vie <= 0){
       printf("tu es mort\n");
@@ -360,11 +361,12 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
     }
     if(slime.vie <= 0){
       printf("Il est mort\n");
-      printf("Tu prends de la force et obtient de l'argent !");
+      printf("Tu prends de la force et obtient de l'argent !\n");
       slime.attaque += 10;
       slime.vie +=30;
       player.attaque += 15;
       piece +=5;
+      slime.vie = 50;
     }
     if(player.vie <= 0){
       printf("tu es mort\n");
@@ -406,7 +408,7 @@ if(strcmp(lieux[save].nom, "village") == 0 && strcmp("shop", decision) == 0){
             demande_2 -=1;
             printf("Tu en veux combien ?\n");
             scanf("%d", &nombre);
-            if(nombre <= tableau[demande_2].nombre && piece > (tableau[demande_2].prix*nombre)){
+            if(nombre <= tableau[demande_2].nombre && piece >= (tableau[demande_2].prix*nombre)){
               printf("tu choisi %s\n", tableau[demande_2].nom);
             tableau[demande_2].inventaire += nombre;
             tableau[demande_2].nombre -= nombre;
