@@ -237,6 +237,11 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
         attaque_ogre(&ogre, &player);
       }
     }
+    printf("Il est mort\n");
+    printf("Ou veux-tu aller ?\n");
+    printf("Tu peux aller : plage\n");
+    printf("Tu peux aller : montagne\n");
+    scanf("%s", decision);
   }
   else if(alea_monstre == 2){
     printf("Un slime t'attaque !");
@@ -253,6 +258,11 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
         attaque_slime(&slime, &player);
       }
     }
+    printf("Il est mort\n");
+    printf("Ou veux-tu aller ?\n");
+    printf("Tu peux aller : plage\n");
+    printf("Tu peux aller : montagne\n");
+    scanf("%s", decision);
   }
 }
 
