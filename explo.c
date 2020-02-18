@@ -321,7 +321,6 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
     scanf("%s", decision);
     if(strcmp("montagne", decision)==0){
       printf("tu ne peux pas aller ici\n");
-      scanf("%s", decision);
     }
   }
   else if(alea_monstre == 2){
@@ -352,7 +351,6 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
     scanf("%s", decision);
     if(strcmp("montagne", decision)==0){
       printf("tu ne peux pas aller ici\n");
-      scanf("%s", decision);
     }
   }
 }
@@ -406,6 +404,13 @@ if(strcmp(lieux[save].nom, "village") == 0 && strcmp("shop", decision) == 0){
 
   break;
   }
+  }
+  printf("Ou veux-tu aller ?\n");
+  printf("Tu peux aller : plage\n");
+  printf("Tu peux aller : montagne\n");
+  scanf("%s", decision);
+  if(strcmp(decision, "village")==0){
+    printf("Tu ne peux pas faire ça\n");
   }
 }
 
