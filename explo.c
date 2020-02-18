@@ -83,6 +83,9 @@ void defense_ogre(combat * player, combat * ogre, objet * attaque, objet * defen
   printf("L'ennemie se defends !\n");
 
   (*attaque).inventaire -=1;
+  if((*attaque).inventaire < 0){
+      (*attaque).inventaire =0;
+    }
   if(decision_combat == 1){
     printf("Tu attaque mais ton épée explose en morceau !\n");
     if((*attaque).inventaire > 0){
@@ -122,6 +125,9 @@ void attaque_ogre(combat * ogre, combat * player, objet * attaque, objet * defen
     (*player).vie = (*player).vie - ((*ogre).attaque /2);
     (*defense).inventaire -=1;
     printf("ton bouclier se brise sous sa force!\n");
+    if((*defense).inventaire < 0){
+      (*defense).inventaire = 0;
+    }
     }
     else if ((*defense).inventaire <=0){
       printf("tu n'as plus de quoi te défendre\n");
@@ -142,6 +148,9 @@ void defense_slime(combat * player, combat * slime, objet * attaque){
   if(decision_combat == 1){
     (*attaque).inventaire -=1;
     printf("L'ennemie gobe ton épee !\n");
+    if((*attaque).inventaire < 0){
+      (*attaque).inventaire =0;
+    }
   }
   if(decision_combat == 2){
     printf("Tu te defends ! Et lui aussi !\n");
@@ -172,6 +181,9 @@ void attaque_slime(combat * slime, combat * player, objet * attaque, objet * def
     (*player).vie = (*player).vie - ((*slime).attaque /2);
     printf("ton bouclier a pleins de morve dessus tu l'abandonne car elle te degoute\n");
     (*defense).inventaire -=1;
+    if((*defense).inventaire < 0){
+      (*defense).inventaire = 0;
+    }
     }
     else if((*defense).inventaire <=0){
       printf("tu ne peux pas te defendre vu que tu n'as plus rien\n");
@@ -270,7 +282,9 @@ if(strcmp(decision,"repos") == 0 && lieux[save].difficulte <= 5){
   if(stamina > 100){
   stamina = 100;
 }
+player.vie = 100;
   printf("tu as %d stamina ! \n", stamina);
+  printf("t'es pv sont restauree");
 }
 else if (strcmp(decision,"repos") == 0 && lieux[save].difficulte > 5){
   printf("tu ne peux te reposer tu es en endroit hostile !\n");
@@ -278,9 +292,9 @@ else if (strcmp(decision,"repos") == 0 && lieux[save].difficulte > 5){
 
 scanf("%s", decision);
 
-if(strcmp(decision, "arreter")==0 || stamina <= 0){
-  printf("tu t'arrete !");
-  loop =0;
+if(stamina <= 0){
+  printf("tu es mort de fatigue !\n");
+  return 0;
 }
 if(strcmp(decision, lieux[save].nom) ==0){
             printf("tu ne peux pas effectuer ce deplacements\n");
@@ -311,9 +325,11 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
     }
     if(ogre.vie <= 0){
       printf("Il est mort\n");
+      printf("Tu prends de la force et obtient de l'argent !");
       ogre.attaque += 10;
       slime.vie +=50;
       player.attaque += 20;
+      piece += 40;
     }
     if(player.vie <= 0){
       printf("tu es mort\n");
@@ -344,9 +360,11 @@ if(strcmp(lieux[save].nom, "montagne") == 0 && strcmp("combat", decision) == 0){
     }
     if(slime.vie <= 0){
       printf("Il est mort\n");
+      printf("Tu prends de la force et obtient de l'argent !");
       slime.attaque += 10;
       slime.vie +=30;
       player.attaque += 15;
+      piece +=5;
     }
     if(player.vie <= 0){
       printf("tu es mort\n");
