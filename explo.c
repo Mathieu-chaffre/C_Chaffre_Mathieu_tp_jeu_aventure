@@ -80,9 +80,10 @@ printf("tu peux aller : %s\n", lieux[lieux[save].tableau[2]].nom);
 
 void defense_ogre(combat * player, combat * ogre, objet * attaque, objet * defense){
   printf("L'ennemie se defends !\n");
-  printf("Tu attaque mais ton épée explose en morceau !\n");
+
   (*attaque).inventaire -=1;
   if(decision_combat == 1){
+    printf("Tu attaque mais ton épée explose en morceau !\n");
     if((*attaque).inventaire > 0){
 
     (*ogre).vie = (*ogre).vie - ((*player).attaque/2);
@@ -118,6 +119,8 @@ void attaque_ogre(combat * ogre, combat * player, objet * attaque, objet * defen
     printf("tu te defends !\n");
     if((*defense).inventaire > 0){
     (*player).vie = (*player).vie - ((*ogre).attaque /2);
+    (*defense).inventaire -=1;
+    printf("ton bouclier se brise sous sa force!\n");
     }
     else if ((*defense).inventaire <=0){
       printf("tu n'as plus de quoi te défendre\n");
@@ -140,7 +143,7 @@ void defense_slime(combat * player, combat * slime, objet * attaque){
     printf("L'ennemie gobe ton épee !\n");
   }
   if(decision_combat == 2){
-    printf("Tu te defends !\n");
+    printf("Tu te defends ! Et lui aussi !\n");
   }
 
   printf("Il te reste %d vie !\n", (*player).vie);
@@ -163,8 +166,11 @@ void attaque_slime(combat * slime, combat * player, objet * attaque, objet * def
   }
   if(decision_combat == 2){
     printf("tu te defends !\n");
+    printf("l'ennemie attaque !\n");
     if((*defense).inventaire > 0){
     (*player).vie = (*player).vie - ((*slime).attaque /2);
+    printf("ton bouclier a pleins de morve dessus tu l'abandonne car elle te degoute\n");
+    (*defense).inventaire -=1;
     }
     else if((*defense).inventaire <=0){
       printf("tu ne peux pas te defendre vu que tu n'as plus rien\n");
@@ -185,21 +191,21 @@ int main(){
   lieu lieux[20];
   lieux[1].difficulte = 15;
   strcpy(lieux[1].nom, "plage");
-  strcpy(lieux[1].desc, "tu arrive sur une magnifique plage pleins de poissons morts\n");
+  strcpy(lieux[1].desc, "tu arrive sur une magnifique plage pleins de poissons morts. Ici tu peux fouiller ! (ecrire fouiller)\n");
   strcpy(lieux[3].desc_2, "");
   lieux[1].tableau[1] = 2 ;
   lieux[1].tableau[2] = 3 ;
 
   lieux[2].difficulte = 19;
   strcpy(lieux[2].nom, "montagne");
-  strcpy(lieux[2].desc, "tu arrive sur vers une montagne avec un cimetiere abandonne\n");
+  strcpy(lieux[2].desc, "tu arrive sur vers une montagne avec un cimetiere abandonne ! Ici tu peux combattre (ecrire combat)\n");
   strcpy(lieux[3].desc_2, "");
   lieux[2].tableau[1] = 1 ;
   lieux[2].tableau[2] = 3 ;
 
   lieux[3].difficulte = 3;
   strcpy(lieux[3].nom, "village");
-  strcpy(lieux[3].desc, "tu arrive sur vers un village magnifique de riche\n");
+  strcpy(lieux[3].desc, "tu arrive sur vers un village magnifique de riche. Ici tu peux acheter (ecrire shop)\n");
   strcpy(lieux[3].desc_2, "");
   lieux[3].tableau[1] = 2 ;
   lieux[3].tableau[2] = 1 ;
